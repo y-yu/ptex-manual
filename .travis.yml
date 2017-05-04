@@ -1,0 +1,20 @@
+language: generic
+os:
+  - osx
+  - linux
+dist: trusty
+sudo: false
+before_install:
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
+  - chmod +x install-tex.sh tlmgr.sh
+install:
+  - . ./install-tex.sh
+  - ./tlmgr.sh update --self --all || echo "ignore errors"
+  - ./tlmgr.sh install collection-langjapanese collection-fontsrecommended xypic
+    enumitem newpx newtx fontaxes newtxtt
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      sudo fmtutil-sys --all;
+    fi
+script:
+  - make
